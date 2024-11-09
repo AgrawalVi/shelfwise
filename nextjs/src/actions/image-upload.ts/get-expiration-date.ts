@@ -40,7 +40,12 @@ export const getExpirationDate = async (item: string) => {
   try {
     const response = await generateText({
       model: openai("gpt-4o"),
-      messages: convertToCoreMessages([{role: 'user', content: `${prompt}\nDate: ${format(new Date(), 'P')}\n"Item:${item}`}]), 
+      messages: convertToCoreMessages([
+        {
+          role: "user",
+          content: `${prompt}\nDate: ${format(new Date(), "P")}\n"Item:${item}`,
+        },
+      ]),
     })
 
     console.log(item, response.text)
