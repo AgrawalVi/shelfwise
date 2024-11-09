@@ -1,10 +1,10 @@
 import { db } from "@/lib/db"
 import { transformGroceryItems } from "@/lib/utils"
-import { groceryItem } from "@/types"
+import { GroceryItem} from "@/types"
 
 export const addGroceriesBulk = async (
   userId: string,
-  groceries: groceryItem[]
+  groceries: GroceryItem[]
 ) => {
   const transformedGroceryItems = transformGroceryItems(groceries, userId)
 
@@ -17,7 +17,7 @@ export const addGroceriesBulk = async (
   }
 }
 
-export const addGrocery = async (userId: string, grocery: groceryItem) => {
+export const addGrocery = async (userId: string, grocery: GroceryItem) => {
   try {
     await db.item.create({
       data: {

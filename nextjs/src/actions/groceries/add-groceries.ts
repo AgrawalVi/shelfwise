@@ -1,10 +1,10 @@
 "use server"
 
 import { addGroceriesBulk } from "@/data/grocery-item"
-import { groceryItem } from "@/types"
+import { GroceryItem } from "@/types"
 import { auth } from "@clerk/nextjs/server"
 
-export const addGroceries = async (groceries: groceryItem[]) => {
+export const addGroceries = async (groceries: GroceryItem[]) => {
   const user = auth()
   if (!user || !user.userId) {
     return { error: "User not authenticated" }

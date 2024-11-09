@@ -1,10 +1,10 @@
-import { groceryItem } from "@/types"
+import { GroceryItem } from "@/types"
 
-export function transformGroceryItems(items: groceryItem[], userId: string) {
+export function transformGroceryItems(items: GroceryItem[], userId: string) {
   return items.map((item) => ({
     name: item.name,
     expiresAt: item.expirationDate,
     userId: userId,
-    perishable: item.expirationDate !== undefined,
+    perishable: item.perishable,
   }))
 }

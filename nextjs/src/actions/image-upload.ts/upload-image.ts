@@ -1,8 +1,8 @@
-'use server'
+"use server"
 
-import { groceryItem } from "@/types"
-import { parseOCR } from "./parse-ocr";
-import { getExpirationDate } from "./get-expiration-date";
+import { GroceryItem } from "@/types"
+import { parseOCR } from "./parse-ocr"
+import { getExpirationDate } from "./get-expiration-date"
 
 const validFileTypes: { [key: string]: string[] } = {
   "image/jpeg": [".jpeg", ".jpg"],
@@ -120,14 +120,22 @@ export const uploadImage = async (formData: FormData) => {
 
   console.log(items)
 
-  const toReturn: groceryItem[] = []
-  
+  const toReturn: GroceryItem[] = []
+
   // call the openAI endpoint to generate expiration dates for each grocery
   const itemPromises = items.split("--").map(async (item) => {
     item = item.trim()
     if (!item) return
     const date = await getExpirationDate(item)
-    toReturn.push({ name: item, expirationDate: date ? new Date(date) : undefined })
+    if (date) {
+      toReturn.push({
+        name: item,
+        perishable: true,
+        expirationDate: new Date(date),
+      })
+    } else {
+      toReturn.push({ name: item, perishable: false })
+    }
   })
 
   await Promise.all(itemPromises)
