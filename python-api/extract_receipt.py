@@ -26,7 +26,7 @@ def save_text_to_file(text, output_file):
     except Exception as e:
         print(f"Error saving text to file: {e}")
 
-def main(image_path):
+def extractor(image_path):
     # image_path = "receipt_4.jpg"  
     
     output_text_file = "extracted_text.txt" 
@@ -53,4 +53,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     image_path = sys.argv[1]
-    main(image_path)
+    extractor(image_path)
