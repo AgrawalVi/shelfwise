@@ -41,12 +41,5 @@ def preprocess_image(image):
 
     return cropped_image
         
-# Load image
-image = cv2.imread(r"python-api\receipt1.jpg")
 
-# Preprocess image
-processed_image = preprocess_image(image)
-
-# store image as cropped_receipt.jpg
-cv2.imwrite('cropped_receipt2.jpg', processed_image)
 
