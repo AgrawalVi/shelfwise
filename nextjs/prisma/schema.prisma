@@ -21,12 +21,12 @@ enum RecipeDifficulty {
 
 model User {
   id        String @id
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
   email     String @unique
 
-  lastItmsUpdated    DateTime
-  lastRecipeGenerate DateTime
+  lastItmsUpdated    DateTime?
+  lastRecipeGenerate DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
