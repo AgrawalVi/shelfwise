@@ -1,57 +1,71 @@
-import cv2
-import numpy as np
-import pytesseract
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from preprocess import preprocess_image  # Ensure preprocess.py is in the same directory
-from extract_receipt import extractor
+from pydantic import BaseModel
+import numpy as np
+import cv2
+import base64
+from preprocess import preprocess_image  # Retained import
+from extract_receipt import extractor  # Retained import
+from fastapi.middleware.cors import CORSMiddleware
+
+# Define the expected JSON payload format
+class ImagePayload(BaseModel):
+    content: str
 
 app = FastAPI()
-@app.post("/scan_receipts")
-async def scan_receipts(file: UploadFile = File(...)):
-    try:
-        # converting to numpy array
-        contents = await file.read()
-        nparr = np.frombuffer(contents, np.uint8)
-        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
-        if image is None:
-            return JSONResponse(status_code=400, content={"error": "Invalid image file."})
-        
-        # Preprocess the image, takes in numpy
-        processed_image = preprocess_image(image)
-        
-        # Extract text using Tesseract OCR, also taking in numpy
-        extracted_text = extracted_text.extractor(processed_image)
 
-        #return text
-        print ({"extracted_text": extracted_text})
+origins = [
+    "http://localhost:3000",  # Next.js default development port
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/scan_receipts")
+async def scan_receipts(payload: ImagePayload):
+    """
+    Endpoint to process a serialized image and return extracted text.
+    """
+    try:
+        # Deserialize Base64 string to binary image
+        try:
+            image_bytes = base64.b64decode(payload.content)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Failed to decode Base64 content: {e}")
+
+        # Convert binary image data to a NumPy array
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        # Validate the decoded image
+        if image is None:
+            raise HTTPException(status_code=400, detail="Invalid image data.")
+
+        # Preprocess the image
+        processed_image = preprocess_image(image)  # Ensure preprocess_image is implemented correctly
+
+        # Extract text using OCR
+        extracted_text = extractor(processed_image)  # Ensure extractor is implemented correctly
+
+        # Return extracted text
         return {"extracted_text": extracted_text}
-    
+
+    except HTTPException as e:
+        return JSONResponse(status_code=e.status_code, content={"error": e.detail})
+
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
 
 @app.get("/")
 async def root():
     return {"message": "API is running"}
 
-@app.get('/test')
-async def test():
-    return "Test"
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
-# image = cv2.imread('image-samples/1.jpg')
-
-# processed = preprocess_image(image)
-
-# print(type(processed))
-
-# text = extractor(processed)
-
-# print(text)
-
-
