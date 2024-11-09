@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { db } from '@/lib/db';
 import { RecipeDifficulty } from '@prisma/client';
 
@@ -80,8 +82,19 @@ export async function saveRecipesToDatabase(recipes: any[], userId: string): Pro
             continue;
           }
 
+          // Convert ingredient name to lowercase to ensure case-insensitive comparison
+          const ingredientNameLower = ingredient.name.toLowerCase();
+          console.log('Processing ingredient:', ingredientNameLower);
+
+          // Find the item in user's inventory with case-insensitive match
           const existingItem = await db.item.findFirst({
-            where: { name: ingredient.name, userId },
+            where: {
+              userId,
+              name: {
+                equals: ingredientNameLower,
+                mode: 'insensitive',
+              },
+            },
           });
 
           if (existingItem) {

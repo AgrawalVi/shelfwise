@@ -2,7 +2,9 @@
 
 import { openai } from '@ai-sdk/openai';
 import { generateText, convertToCoreMessages } from 'ai';
-import { getUserItems, saveRecipesToDatabase } from '../data/generate-recipes-db';
+import { auth } from '@clerk/nextjs/server';
+import { getUserById } from '@/data/users';
+import { getUserItems, saveRecipesToDatabase } from '@/data/generate-recipes-db'; // Import the necessary functions
 
 // Base prompt to use directly in the code
 const BASE_PROMPT = `
@@ -26,12 +28,13 @@ Guidelines for the Response:
 5. Maintain a formal and informative tone throughout the response. Do not use casual or ambiguous language.
 6. Ensure that each line of your response ends with " -- ".
 7. Ensure that the steps are detailed and provide enough information for a user to prepare the dish successfully.
+8. When listing out all the ingredients in the ingredients list, make sure to not change the name of the ingredient at all, not even lower case of upper case
 
 The format for each recipe should look like the following:
 
 Recipe Name:: "Vegetable Stir Fry" -- 
 Short Description:: "A quick and healthy stir fry made with fresh vegetables that are packed with nutrients." -- 
-Ingredients:: "Carrot - 2 pcs, Broccoli - 1 cup, Olive Oil - 2 tbsp, Salt - 1 tsp (assumed)" -- 
+Ingredients:: "Carrot - 2 pcs, broccoli - 1 cup, Olive Oil - 2 tbsp, Salt - 1 tsp (assumed)" -- 
 Time Required (in seconds):: 900 -- 
 Difficulty Level:: "Easy" -- 
 Steps:: 
@@ -162,24 +165,36 @@ function parseIngredients(ingredientsStr: string) {
 }
 
 // Function to generate and save recipes
-export async function generateAndSaveRecipes(userId: string): Promise<void> {
-  console.log('Starting recipe generation...');
+export async function generateAndSaveRecipes(): Promise<void> {
+  const currentUser = auth();
 
-  if (!userId) {
-    throw new Error('User ID is required');
+  if (!currentUser.userId) {
+    console.log('Unauthorized');
+    throw new Error('Unauthorized');
   }
 
+  const existingUser = await getUserById(currentUser.userId);
+
+  if (!existingUser) {
+    console.log('User not found');
+    throw new Error('User not found');
+  }
+
+  const userId = existingUser.id;
+
+  console.log('Starting recipe generation...');
+
   try {
-    // Fetch unexpired ingredients for the user
-    console.log('Fetching unexpired ingredients for user...');
+    // Fetch usable ingredients for the user
+    console.log('Fetching usable ingredients for user...');
     const userItems = await getUserItems(userId);
 
     if (!userItems.length) {
-      console.log('No unexpired ingredients found for the user.');
+      console.log('No usable ingredients found for the user.');
       return;
     }
 
-    console.log('Unexpired ingredients found:', userItems);
+    console.log('Usable ingredients found:', userItems);
 
     const ingredientList = userItems.map(item => item.name).join(', ');
 

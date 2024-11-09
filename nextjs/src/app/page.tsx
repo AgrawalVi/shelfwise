@@ -9,7 +9,7 @@ export default function Home() {
   }
 
   async function generateRecipes() {
-    await generateAndSaveRecipes("user_2od8V4jeOCOts6kmv1HljvV07Ny")
+    await generateAndSaveRecipes()
   }
 
   return (
