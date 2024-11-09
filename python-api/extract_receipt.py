@@ -1,6 +1,8 @@
 import sys
 from PIL import Image
+import numpy as np
 import pytesseract
+import cv2
 
 def load_receipt_image(image_path):
     try:
@@ -26,31 +28,35 @@ def save_text_to_file(text, output_file):
     except Exception as e:
         print(f"Error saving text to file: {e}")
 
-def extractor(image_path):
-    # image_path = "receipt_4.jpg"  
+
+def extractor(image_input):
     
     output_text_file = "extracted_text.txt" 
 
-    image = load_receipt_image(image_path)
-    if not image:
-        return
 
-    # extract
+    if isinstance(image_input, np.ndarray):
+        image = Image.fromarray(cv2.cvtColor(image_input, cv2.COLOR_BGR2RGB))
+    elif isinstance(image_input, str):
+        image = load_receipt_image(image_input)
+    else:
+        print("Unsupported image input format.")
+        return None
+
+    if not image:
+        return None
+    
+    #save_text_to_file(text, output_text_file)
+
     text = extract_text_from_image(image)
     if not text.strip():
         print("No text extracted from the image.")
         return
+    return text
 
-    print("Extracted Text:")
-    print(text)
-
-    # write to txt file
-    save_text_to_file(text, output_text_file)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python script.py <image_path>")
         sys.exit(1)
-
     image_path = sys.argv[1]
     extractor(image_path)
