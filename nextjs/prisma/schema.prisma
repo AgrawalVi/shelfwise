@@ -42,7 +42,7 @@ model Item {
   expiresAt  DateTime
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
@@ -62,7 +62,7 @@ model Recipe {
   difficulty          RecipeDifficulty
 
   userId     String
-  user       User         @relation(fields: [userId], references: [id])
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   RecipeItem RecipeItem[]
   RecipeStep RecipeStep[]
 }
@@ -74,9 +74,9 @@ model RecipeItem {
   unit     String
 
   itemId   Int
-  item     Item   @relation(fields: [itemId], references: [id])
+  item     Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
   recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model RecipeStep {
@@ -86,5 +86,5 @@ model RecipeStep {
   time Int
 
   recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
