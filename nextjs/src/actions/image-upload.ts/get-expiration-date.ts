@@ -1,4 +1,3 @@
-import { GroceryItem } from "@/types"
 import { openai } from "@ai-sdk/openai"
 import { generateText, convertToCoreMessages } from "ai"
 import { format } from "date-fns"
