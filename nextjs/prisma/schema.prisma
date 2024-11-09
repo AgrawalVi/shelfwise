@@ -39,7 +39,7 @@ model Item {
 
   name       String
   perishable Boolean
-  expiresAt  DateTime
+  expiresAt  DateTime?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
