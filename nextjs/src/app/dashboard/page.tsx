@@ -18,6 +18,7 @@ export default async function Dashboard() {
   // }
 
   const groceries = await getGroceriesByUser(currentUser.userId)
+  console.log(groceries)
 
   // return <ConfirmItemsForm groceries={} />
   return (

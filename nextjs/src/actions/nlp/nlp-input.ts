@@ -78,27 +78,36 @@ Given this response text:
 ${responseText}
 
 And this list of existing ingredients:
-${userIngredients.map((item) => item.name).join(", ")}
+${userIngredients.map(item => item.name).join(', ')}
 
 Please adjust the response text to match the exact ingredient names provided in the list. If an ingredient in the response text differs in form (such as plural vs. singular) or spelling from the list, correct it to match the exact format found in the list. If an ingredient has a similar alternative name (e.g., "kraft mac and cheese" vs. "mac and cheese"), standardize it according to the closest match in the list. Leave any item not in the list unchanged.
-
+Also only correct it if the command is edit, or delete, don't cahnge anything that might be after add, only items of edit and delete should be adjusted
 Only provide the corrected text.
 
 For example ingredients: apple, banana, rice, kraft mac and cheese, sugar
 
-Original response text: "ADD; apples: 11-11-24"
-Corrected response: "ADD; apple: 11-11-24"
+Original response text: "EDIT; apples: 11-11-24"
+Corrected response: "EDIT; apple: 11-11-24"
 
 Another example:
-Original response text: "ADD; mac and cheese: 11-11-24"
-Corrected response: "ADD; kraft mac and cheese: 11-11-24"
+ingredients : trader joe's beef stew, kraft mac and cheese
+
+Original response text: """
+ADD; beef stew: 11-11-24
+EDIT; mac and cheese: 11-11-24
+"""
+Corrected response: """
+ADD; beef stew: 11-11-24
+EDIT; kraft mac and cheese: 11-11-24
+"""
 
 Only provide the corrected response text without additional explanations. Make sure the replacements you are doing are for products that are really close to each other, I don't want something that is losely related to be corrected, only those that have a very high chance of being the same products such as:
 "mac and cheese" and "kraft mac and cheese"
 "nacho chips" and "nacho crisps"
 "bag of apple" and "apples"
 "read to eat oats" and "readymade oatmeals"
-they essentially be the same things, doesn't have to be perfectly same but same enough
+they essentially be the same things, doesn't have to be perfectly same but same enough. only do this for edit and delete though
+
 `
 
   // Make another query to the OpenAI API for singular/plural correction

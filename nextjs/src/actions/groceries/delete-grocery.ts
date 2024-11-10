@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server"
 import { deleteGrocery as deleteGroceryDb } from "@/data/grocery-item"
+import { revalidatePath } from "next/cache"
 
 export const deleteGrocery = async (groceryId: number) => {
   const currentUser = auth()
@@ -15,6 +16,8 @@ export const deleteGrocery = async (groceryId: number) => {
   if (!response) {
     return { error: "Failed to delete grocery" }
   }
+
+  revalidatePath("/dashboard")
 
   return { success: "Grocery deleted successfully" }
 }

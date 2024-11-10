@@ -47,6 +47,7 @@ const ShelfMateForm = ({
       processNlpInput(data)
         .then((response) => {
           if (response) {
+            console.log(response)
             setNLPOutput(response)
             form.reset()
           } else {

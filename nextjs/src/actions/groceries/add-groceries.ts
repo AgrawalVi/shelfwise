@@ -4,6 +4,7 @@ import { addGroceriesBulk, addGrocery } from "@/data/grocery-item"
 import { groceryItemSchema } from "@/schemas"
 import { GroceryItem } from "@/types"
 import { auth } from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache"
 import * as z from "zod"
 
 export const addGroceries = async (groceries: GroceryItem[]) => {
@@ -34,6 +35,8 @@ export async function createGrocery(data: z.infer<typeof groceryItemSchema>) {
     perishable: values.data.perishable,
     expirationDate: values.data.expirationDate,
   })
+
+  revalidatePath("/dashboard")
 
   return {
     success: true,

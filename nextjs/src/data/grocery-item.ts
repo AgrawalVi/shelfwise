@@ -40,7 +40,7 @@ export const getGroceriesByUser = async (userId: string) => {
       },
       orderBy: {
         expiresAt: {
-          sort: "desc",
+          sort: "asc",
           nulls: "last",
         },
       },
@@ -80,8 +80,8 @@ export const deleteGrocery = async (userId: string, groceryId: number) => {
     await db.item.delete({
       where: {
         id: groceryId,
-        userId
-      }
+        userId,
+      },
     })
     return true
   } catch (e) {
