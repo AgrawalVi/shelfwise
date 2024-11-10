@@ -78,7 +78,7 @@ Given this response text:
 ${responseText}
 
 And this list of existing ingredients:
-${userIngredients.map(item => item.name).join(', ')}
+${userIngredients.map((item) => item.name).join(", ")}
 
 Please adjust the response text to match the exact ingredient names provided in the list. If an ingredient in the response text differs in form (such as plural vs. singular) or spelling from the list, correct it to match the exact format found in the list. If an ingredient has a similar alternative name (e.g., "kraft mac and cheese" vs. "mac and cheese"), standardize it according to the closest match in the list. Leave any item not in the list unchanged.
 Also only correct it if the command is edit, or delete, don't cahnge anything that might be after add, only items of edit and delete should be adjusted
@@ -107,7 +107,7 @@ Only provide the corrected response text without additional explanations. Make s
 "bag of apple" and "apples"
 "read to eat oats" and "readymade oatmeals"
 they essentially be the same things, doesn't have to be perfectly same but same enough. only do this for edit and delete though
-
+just give a formatted string, no need to add the quotes
 `
 
   // Make another query to the OpenAI API for singular/plural correction
