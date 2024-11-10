@@ -1,3 +1,5 @@
+import "server-only"
+
 import { db } from "@/lib/db"
 
 export async function createUser(email: string, firstName: string | null, lastName: string | null, clerkId: string) {
@@ -29,5 +31,18 @@ export async function updateUserByClerkId(clerkId: string, email: string, firstN
     })
   } catch (e) {
     console.error(e)
+  }
+}
+
+export async function getUserById(id: string){
+  try{
+    return await db.user.findUnique({
+      where: {
+        id: id
+      }
+    })
+  } catch (e) {
+    console.error(e)
+    return null
   }
 }
