@@ -1,8 +1,8 @@
-import Link from "next/link";
+import Link from "next/link"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-green-500 text-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-green-500 text-white p-4">
       <header className="text-center mb-8">
         <h1 className="text-5xl font-bold mb-4">Welcome to ShelfWise</h1>
         <p className="text-lg">
@@ -39,5 +39,5 @@ export default function LandingPage() {
         </p>
       </footer>
     </div>
-  );
+  )
 }
