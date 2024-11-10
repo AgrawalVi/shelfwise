@@ -5,6 +5,7 @@ import { deleteGroceriesBulk as deleteGroceriesBulkDb, deleteGrocery as deleteGr
 import { revalidatePath } from "next/cache"
 import { generateAndSaveRecipes } from "../generate-recipes/generate-recipes"
 import { deleteRecipeById } from "@/data/recipes"
+import { redirect } from "next/navigation"
 
 export const deleteGrocery = async (groceryId: number) => {
   const currentUser = auth()
@@ -25,6 +26,7 @@ export const deleteGrocery = async (groceryId: number) => {
 }
 
 export const deleteGroceriesBulk = async (groceryIds: number[], recipeId: number) => {
+  console.log("GroceryIDS", groceryIds)
   const currentUser = auth()
 
   if (!currentUser || !currentUser.userId) {
@@ -43,5 +45,7 @@ export const deleteGroceriesBulk = async (groceryIds: number[], recipeId: number
   }
 
   revalidatePath("/dashboard")
-  return { success: "Groceries deleted successfully"}
+  revalidatePath("/dashboard/recipes")
+
+  redirect("/dashboard/recipes")
 }

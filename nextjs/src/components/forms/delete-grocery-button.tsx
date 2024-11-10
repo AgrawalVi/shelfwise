@@ -32,7 +32,7 @@ export default function DeleteGroceryButton({
   const handleDelete = async () => {
     const response = await deleteGrocery(groceryId)
     if (response.success) {
-      toast({ title: "Application deleted successfully" })
+      toast({ title: "Grocery deleted successfully" })
     } else {
       toast({
         title: "Something went wrong!",
@@ -58,7 +58,7 @@ export default function DeleteGroceryButton({
             </DialogTrigger>
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Delete Application</TooltipContent>
+        <TooltipContent>Delete Grocery</TooltipContent>
       </Tooltip>
       <DialogContent>
         <DialogHeader>
@@ -67,7 +67,7 @@ export default function DeleteGroceryButton({
           </DialogTitle>
           <DialogDescription>
             <VisuallyHidden.Root>
-              Are you sure you want to delete the application?
+              Are you sure you want to delete the grocery?
             </VisuallyHidden.Root>
           </DialogDescription>
           <Alert variant="destructive">

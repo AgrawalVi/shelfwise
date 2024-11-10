@@ -21,6 +21,7 @@ export const deleteGroceriesBulk = async (
   userId: string,
   groceryIds: number[]
 ) => {
+  console.log("in grocery data bulk delete")
   try {
     await db.item.deleteMany({
       where: {

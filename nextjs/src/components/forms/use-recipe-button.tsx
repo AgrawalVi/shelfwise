@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { RecipeWithData } from "@/types"
 import {
@@ -35,15 +35,15 @@ export default function UseRecipeButton({
       Array.from(toggledItems),
       recipe.id
     )
-    if (response.success) {
-      toast({ title: "Recipe marked as used successfully" })
-      setOpen(false)
-    } else {
+    if (response && response.error) {
       toast({
         title: "Something went wrong!",
         description: response.error,
         variant: "destructive",
       })
+    } else {
+      toast({ title: "Recipe marked as used successfully" })
+      setOpen(false)
     }
 
     setLoading(false)
@@ -57,6 +57,7 @@ export default function UseRecipeButton({
       } else {
         newSet.add(item_id)
       }
+      console.log(newSet)
       return newSet
     })
   }

@@ -80,7 +80,7 @@ const GroceryForm = ({ groceryItem, setOpen, editing }: GroceryFormProps) => {
             if (response.success) {
               form.reset()
               setOpen(false)
-              toast({ title: "Application logged successfully" })
+              toast({ title: "Grocery logged successfully" })
             } else {
               toast({
                 title: "Something went wrong!",
