@@ -19,7 +19,7 @@ import {
 import DatePickerFormElement from "../ui/date-picker-form"
 import { Item } from "@prisma/client"
 import { groceryItemSchema } from "@/schemas"
-import { Checkbox } from "@radix-ui/react-checkbox"
+import { Checkbox } from "@/components/ui/checkbox"
 import { editGrocery } from "@/actions/groceries/edit-grocery"
 import { createGrocery } from "@/actions/groceries/add-groceries"
 
@@ -128,7 +128,7 @@ const GroceryForm = ({ groceryItem, setOpen, editing }: GroceryFormProps) => {
             control={form.control}
             name="perishable"
             render={({ field }) => (
-              <FormItem className="flex">
+              <FormItem className="flex items-center gap-2">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -146,11 +146,11 @@ const GroceryForm = ({ groceryItem, setOpen, editing }: GroceryFormProps) => {
             name="expirationDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Date Applied</FormLabel>
+                <FormLabel>Expiration Date</FormLabel>
                 <DatePickerFormElement
                   onValueChange={field.onChange}
                   value={field.value}
-                  disabled={isPending}
+                  disabled={isPending || !form.getValues("perishable")}
                 />
                 <FormMessage />
               </FormItem>

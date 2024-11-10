@@ -2,6 +2,7 @@ import { getRecipeWithDataById } from "@/data/recipes";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import UseRecipeButton from "@/components/forms/use-recipe-button";
 
 export default async function page({ params }: { params: { recipeId: string } }) {
   const currentUser = auth();
@@ -27,13 +28,14 @@ export default async function page({ params }: { params: { recipeId: string } })
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
       {/* Back to Recipes Link */}
-      <div className="mb-6">
+      <div className="mb-6 flex justify-between">
         <Link
           href="/dashboard/recipes"
           className="text-blue-500 hover:underline text-sm font-medium"
         >
           ← Back to Recipes
         </Link>
+        <UseRecipeButton recipe={recipe} />
       </div>
 
       {/* Recipe Header */}

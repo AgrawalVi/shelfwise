@@ -1,8 +1,10 @@
 'use server'
 
 import { auth } from "@clerk/nextjs/server"
-import { deleteGrocery as deleteGroceryDb } from "@/data/grocery-item"
+import { deleteGroceriesBulk as deleteGroceriesBulkDb, deleteGrocery as deleteGroceryDb } from "@/data/grocery-item"
 import { revalidatePath } from "next/cache"
+import { generateAndSaveRecipes } from "../generate-recipes/generate-recipes"
+import { deleteRecipeById } from "@/data/recipes"
 
 export const deleteGrocery = async (groceryId: number) => {
   const currentUser = auth()
@@ -20,4 +22,26 @@ export const deleteGrocery = async (groceryId: number) => {
   revalidatePath("/dashboard")
 
   return { success: "Grocery deleted successfully" }
+}
+
+export const deleteGroceriesBulk = async (groceryIds: number[], recipeId: number) => {
+  const currentUser = auth()
+
+  if (!currentUser || !currentUser.userId) {
+    return { error: "User not authenticated" }
+  }
+
+  const response1 = await deleteGroceriesBulkDb(currentUser.userId, groceryIds)
+  const response2 = await deleteRecipeById(recipeId, currentUser.userId)
+
+  if (!response1 || !response2) {
+    return { error: "Failed to delete groceries" }
+  }
+
+  if (groceryIds.length > 2) {
+    generateAndSaveRecipes()
+  }
+
+  revalidatePath("/dashboard")
+  return { success: "Groceries deleted successfully"}
 }

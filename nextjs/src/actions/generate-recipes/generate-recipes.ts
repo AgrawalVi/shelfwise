@@ -7,6 +7,7 @@ import { getUserById } from '@/data/users';
 import { getUserItems, saveRecipesToDatabase } from '@/data/generate-recipes-db';
 import { db } from '@/lib/db';
 import { BASE_PROMPT } from './recipe-prompt';
+import { revalidatePath } from 'next/cache';
 
 // Function to parse the AI response
 function parseRecipesFromResponse(response: string) {
@@ -230,6 +231,8 @@ export async function generateAndSaveRecipes(): Promise<void> {
 
     // Save the recipes to the database
     await saveRecipesToDatabase(recipes, userId);
+
+    revalidatePath('/dashboard/recipes')
 
     console.log('Recipes generated and saved successfully.');
   } catch (error) {

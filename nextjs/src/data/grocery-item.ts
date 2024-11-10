@@ -17,6 +17,26 @@ export const addGroceriesBulk = async (
   }
 }
 
+export const deleteGroceriesBulk = async (
+  userId: string,
+  groceryIds: number[]
+) => {
+  try {
+    await db.item.deleteMany({
+      where: {
+        id: {
+          in: groceryIds
+        },
+        userId
+      }
+    })
+    return true
+  } catch (e) {
+    console.error(e)
+    return false
+  }
+}
+
 export const addGrocery = async (userId: string, grocery: GroceryItem) => {
   try {
     await db.item.create({

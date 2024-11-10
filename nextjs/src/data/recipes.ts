@@ -17,7 +17,10 @@ export const getRecipesByUser = async (userId: string) => {
   }
 }
 
-export const getRecipeWithDataById = async (recipeId: number, userId: string) => {
+export const getRecipeWithDataById = async (
+  recipeId: number,
+  userId: string
+) => {
   try {
     return await db.recipe.findUnique({
       where: {
@@ -27,18 +30,33 @@ export const getRecipeWithDataById = async (recipeId: number, userId: string) =>
       include: {
         RecipeItem: {
           include: {
-            item: true
-          }
+            item: true,
+          },
         },
         RecipeStep: {
           orderBy: {
-            id: 'asc'
-          }
-        }
-      }
+            id: "asc",
+          },
+        },
+      },
     })
   } catch (e) {
     console.error(e)
     return null
+  }
+}
+
+export const deleteRecipeById = async (recipeId: number, userId: string) => {
+  try {
+    await db.recipe.delete({
+      where: {
+        id: recipeId,
+        userId,
+      },
+    })
+    return true
+  } catch (e) {
+    console.error(e)
+    return false
   }
 }
