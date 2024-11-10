@@ -116,7 +116,7 @@ export const uploadImage = async (formData: FormData) => {
 
   console.log("toReturn", toReturn)
 
-  addGroceriesBulk(user.userId, toReturn)
+  await addGroceriesBulk(user.userId, toReturn)
 
   generateAndSaveRecipes()
 
