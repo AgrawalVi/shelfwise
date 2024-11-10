@@ -171,11 +171,11 @@ export async function generateAndSaveRecipes(): Promise<void> {
 
     console.log('Usable ingredients found:', userItems);
 
-    // Fetch the last 10 recipe names for the user
+    // Fetch the last 5 recipe names for the user
     const lastRecipes = await db.recipe.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      take: 10,
+      take: 5,
       select: { name: true },
     });
 
