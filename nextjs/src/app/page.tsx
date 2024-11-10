@@ -1,7 +1,7 @@
 "use client"
 
 import { uploadImage } from "@/actions/image-upload.ts/upload-image"
-import { generateAndSaveRecipes } from "@/actions/generate-recipes"
+import { generateAndSaveRecipes } from "@/actions/generate-recipes/generate-recipes"
 
 export default function Home() {
   const handleClick = async () => {
