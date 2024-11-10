@@ -1,8 +1,9 @@
 "use client"
 
-import { BookOpen, Camera, Vegan, WandSparkles } from "lucide-react"
+import { BookOpen, Camera, Upload, Vegan, WandSparkles } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import UploadButton from "./general/upload-button"
 
 export default function Footer() {
   const pathname = usePathname()
@@ -24,9 +25,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-center justify-center relative">
           {pathname === "/dashboard" ? (
-            <div className="p-4 -translate-y-[8px] -mt-[22px] rounded-full bg-accent border">
-              <Camera size={32} />
-            </div>
+            <UploadButton />
           ) : (
             <Link href="/dashboard">
               <Vegan size={28} />

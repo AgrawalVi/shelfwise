@@ -37,11 +37,7 @@ interface GroceryFormPropsNotEditing {
 
 type GroceryFormProps = GroceryFormPropsEditing | GroceryFormPropsNotEditing
 
-const ApplicationForm = ({
-  groceryItem,
-  setOpen,
-  editing,
-}: GroceryFormProps) => {
+const GroceryForm = ({ groceryItem, setOpen, editing }: GroceryFormProps) => {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
 
@@ -169,4 +165,4 @@ const ApplicationForm = ({
   )
 }
 
-export default ApplicationForm
+export default GroceryForm

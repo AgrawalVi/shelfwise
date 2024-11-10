@@ -11,3 +11,7 @@ export const groceryItemSchema = z.object({
     path: ["expirationDate"],
   }
 );
+
+export const shelfMateSchema = z.object({
+  text: z.string().min(15, "Text must be at least 15 characters"),
+})

@@ -64,5 +64,7 @@ expected result:
 "DELETE; tomatoes"
 "EDIT; beef: 11-16-2024"
 
+Today's date is ${new Date().toLocaleDateString()}
+
 Return the string for the following command by the user:
-`;
+`

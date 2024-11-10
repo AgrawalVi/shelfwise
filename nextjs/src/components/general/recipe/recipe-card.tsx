@@ -50,23 +50,23 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
               <div>
                 {recipe.difficulty === "Easy" && (
                   <>
-                    <span className="text-2xl text-green-600">•</span>
-                    <span className="text-2xl text-muted">•</span>
-                    <span className="text-2xl text-muted">•</span>
+                    <span className="text-3xl text-green-600">•</span>
+                    <span className="text-3xl text-muted">•</span>
+                    <span className="text-3xl text-muted">•</span>
                   </>
                 )}
                 {recipe.difficulty === "Medium" && (
                   <>
-                    <span className="text-2xl text-orange-500">•</span>
-                    <span className="text-2xl text-orange-500">•</span>
-                    <span className="text-2xl text-muted">•</span>
+                    <span className="text-3xl text-orange-500">•</span>
+                    <span className="text-3xl text-orange-500">•</span>
+                    <span className="text-3xl text-muted">•</span>
                   </>
                 )}
                 {recipe.difficulty === "Hard" && (
                   <>
-                    <span className="text-2xl text-red-600">•</span>
-                    <span className="text-2xl text-red-600">•</span>
-                    <span className="text-2xl text-red-600">•</span>
+                    <span className="text-3xl text-red-600">•</span>
+                    <span className="text-3xl text-red-600">•</span>
+                    <span className="text-3xl text-red-600">•</span>
                   </>
                 )}
               </div>
