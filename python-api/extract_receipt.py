@@ -31,9 +31,6 @@ def save_text_to_file(text, output_file):
 
 def extractor(image_input):
     
-    output_text_file = "extracted_text.txt" 
-
-
     if isinstance(image_input, np.ndarray):
         image = Image.fromarray(cv2.cvtColor(image_input, cv2.COLOR_BGR2RGB))
     elif isinstance(image_input, str):
@@ -52,11 +49,3 @@ def extractor(image_input):
         print("No text extracted from the image.")
         return
     return text
-
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python script.py <image_path>")
-        sys.exit(1)
-    image_path = sys.argv[1]
-    extractor(image_path)

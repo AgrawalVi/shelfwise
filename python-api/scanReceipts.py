@@ -11,7 +11,6 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 security = HTTPBearer()
 SECRET_TOKEN = os.getenv("API_KEY")
@@ -25,9 +24,8 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost"
 ]
-
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,7 +39,6 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
     if token != SECRET_TOKEN:
         raise HTTPException(status_code=403, detail="Invalid or missing token")
-
 
 @app.post("/scan_receipts")
 async def scan_receipts(payload: ImagePayload, credentials: HTTPAuthorizationCredentials = Depends(verify_token)):
