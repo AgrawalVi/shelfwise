@@ -2,15 +2,15 @@ import { openai } from "@ai-sdk/openai"
 import { generateText, convertToCoreMessages } from "ai"
 
 const prompt = `
-You are a helpful assistant that will extract grocery items from the text that is provided. 
-The provided text that was extracted from an OCR that was used on a receipt. 
+You are a helpful assistant that will extract grocery items from the text that is provided.
+The provided text that was extracted from an OCR that was used on a receipt.
 
-Based on the provided text, extract the grocery items in the human friendly manner. 
-Only return the name of items that are groceries and food items. Do not return any other items. 
-
----
-Each item should be followed by "--" and a new line. This is necessary for the parser to know that the item is done.
----
+Task:
+>Based on the provided text, extract the grocery items in a human friendly manner. 
+>Only return the name of items that are groceries and food items. Do not return any other items. 
+>Make sure the item names are recognizable and the user can understand them easily
+>Get rid of unnecassry letters or number preceeding to succeeding the item name that is not necessary
+> Make sure Each item entry is followed by "--" and a new line. This is necessary for the parser to know that the item is done.
 
 Here is an example of input text:
 
@@ -23,6 +23,7 @@ FD
 AF COFFEE FD
 MP FILTERS FT
 LEAN CUISINE FD
+A-Potato FD
 LEAN POCKETS FD
 PILSBRY CRES FD
 COFFEEMATE FO
@@ -57,6 +58,7 @@ Special K Ceral --
 Naturevalley Cookies --
 AP Coffee --
 Lean Cuisine Frozen --
+Potato --
 Lean Pockets Frozen --
 Coffeemate --
 Pillsbury Crescents --
