@@ -112,7 +112,7 @@ function parseIngredients(ingredientsStr: string) {
 
 // Function to get an image URL for a given recipe name using fetch
 async function fetchImageForRecipe(recipeName: string): Promise<string | null> {
-  const apiKey = 'a302997197054c868e0c4bfc9d15bda7'; // Replace with your actual API key
+  const apiKey = process.env.BING_API_KEY!
   const endpoint = `https://api.bing.microsoft.com/v7.0/images/search?q=${encodeURIComponent(recipeName)}&count=1`;
 
   try {

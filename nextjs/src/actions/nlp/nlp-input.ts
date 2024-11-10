@@ -2,6 +2,7 @@
 
 import { openai } from '@ai-sdk/openai';
 import { generateText, convertToCoreMessages } from 'ai';
+import { db } from '@/lib/db';
 import { NLP_PROMPT } from './nlp-prompt';
 
 export async function processNlpInput(userId: string, inputText: string): Promise<string> {
@@ -10,8 +11,16 @@ export async function processNlpInput(userId: string, inputText: string): Promis
     throw new Error('User ID is required');
   }
 
-  const completePrompt = `${NLP_PROMPT}\n${inputText}`;
+  // Query to get all the ingredients for the user
+  const userIngredients = await db.item.findMany({
+    where: { userId },
+    select: { id: true, name: true },
+  });
 
+  // Create a map for easy lookup of ingredient names (case-insensitive)
+  const ingredientMap = new Map(userIngredients.map(item => [item.name.toLowerCase(), item.id]));
+
+  const completePrompt = `${NLP_PROMPT}\n${inputText}`;
   console.log('Complete prompt for NLP:', completePrompt);
 
   let response;
@@ -42,19 +51,27 @@ export async function processNlpInput(userId: string, inputText: string): Promis
   for (const line of lines) {
     const [command, itemsString] = line.split(';', 2).map(part => part.trim());
 
-    if (command === 'ADD' || command === 'EDIT' || command === 'DELETE') { // CHANGE THIS
+    if (command === 'ADD' || command === 'EDIT' || command === 'DELETE') {
       console.log(`Command: ${command}`);
 
       const items = itemsString.split(',').map(item => item.trim());
 
       for (const item of items) {
         if (command === 'DELETE') {
-          // Handle DELETE 
-          console.log(`Item: ${item}`);
+          // Handle DELETE - only check item existence
+          if (ingredientMap.has(item.toLowerCase())) {
+            console.log(`Item exists: ${item}`);
+          } else {
+            console.log(`Item not found in user's ingredients: ${item}`);
+          }
         } else {
-          // Handle ADD and EDIT
+          // Handle ADD and EDIT - check item and parse date
           const [itemName, date] = item.split(':').map(part => part.trim());
-          console.log(`Item: ${itemName}, Date: ${date}`);
+          if (ingredientMap.has(itemName.toLowerCase())) {
+            console.log(`Item exists: ${itemName}, Date: ${date}`);
+          } else {
+            console.log(`Item not found in user's ingredients: ${itemName}`);
+          }
         }
       }
     } else {
