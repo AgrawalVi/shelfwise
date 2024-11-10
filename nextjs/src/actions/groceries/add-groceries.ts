@@ -27,6 +27,8 @@ export async function createGrocery(data: z.infer<typeof groceryItemSchema>) {
   const values = groceryItemSchema.safeParse(data)
 
   if (!values.success) {
+    console.log("INVALID DATA NOT WORKING asdfasdfads")
+    console.error(values.data)
     return { error: "Invalid data" }
   }
 
