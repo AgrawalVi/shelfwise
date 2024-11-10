@@ -2,6 +2,10 @@ import base64
 import os
 import requests
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("API_KEY")
 
 def serialize_image(filepath):
     """
@@ -33,9 +37,13 @@ def send_serialized_image(api_url, serialized_image):
     """
     Send a serialized image to the scan_receipts endpoint.
     """
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
     try:
         # Send the serialized image as a JSON payload
-        response = requests.post(api_url, json=serialized_image)
+        response = requests.post(api_url, json=serialized_image, headers=headers)
         return response.json()
     except Exception as e:
         return {"error": str(e)}
