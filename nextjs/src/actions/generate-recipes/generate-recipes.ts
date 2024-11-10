@@ -4,11 +4,9 @@ import { openai } from '@ai-sdk/openai';
 import { generateText, convertToCoreMessages } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { getUserById } from '@/data/users';
-import { getUserItems, saveRecipesToDatabase } from '@/data/generate-recipes-db'; // Import the necessary functions
-import { db } from '@/lib/db'; // Ensure you import your database connection
-
-import { BASE_PROMPT } from './recipe-prompt'; 
-
+import { getUserItems, saveRecipesToDatabase } from '@/data/generate-recipes-db';
+import { db } from '@/lib/db';
+import { BASE_PROMPT } from './recipe-prompt';
 
 // Function to parse the AI response
 function parseRecipesFromResponse(response: string) {
@@ -112,6 +110,35 @@ function parseIngredients(ingredientsStr: string) {
   return ingredients;
 }
 
+// Function to get an image URL for a given recipe name using fetch
+async function fetchImageForRecipe(recipeName: string): Promise<string | null> {
+  const apiKey = 'a302997197054c868e0c4bfc9d15bda7'; // Replace with your actual API key
+  const endpoint = `https://api.bing.microsoft.com/v7.0/images/search?q=${encodeURIComponent(recipeName)}&count=1`;
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: { 'Ocp-Apim-Subscription-Key': apiKey },
+    });
+    if (!response.ok) {
+      console.error(`Error fetching image for recipe "${recipeName}": ${response.statusText}`);
+      return null;
+    }
+
+    const data = await response.json();
+    const images = data.value;
+
+    if (images.length > 0) {
+      return images[0].contentUrl; // Return the first image URL
+    } else {
+      console.log(`No image found for recipe: ${recipeName}`);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error fetching image for recipe "${recipeName}":`, error);
+    return null;
+  }
+}
+
 // Function to generate and save recipes
 export async function generateAndSaveRecipes(): Promise<void> {
   const currentUser = auth();
@@ -198,6 +225,16 @@ export async function generateAndSaveRecipes(): Promise<void> {
 
     // Save the recipes to the database
     await saveRecipesToDatabase(recipes, userId);
+
+    // Log image URL for each generated recipe
+    for (const recipe of recipes) {
+      const imageUrl = await fetchImageForRecipe(recipe.name);
+      if (imageUrl) {
+        console.log(`Image URL for ${recipe.name}:`, imageUrl);
+      } else {
+        console.log(`No image found for ${recipe.name}`);
+      }
+    }
 
     console.log('Recipes generated and saved successfully.');
   } catch (error) {
