@@ -61,7 +61,7 @@ model Recipe {
   timeToMakeInSeconds Int
   difficulty          RecipeDifficulty
   imageURL            String?
-  
+
   userId              String
   user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   RecipeItem          RecipeItem[]

@@ -223,18 +223,13 @@ export async function generateAndSaveRecipes(): Promise<void> {
       throw new Error('Failed to parse recipes from AI response');
     }
 
+    // Fetch and add image URLs for each recipe
+    for (const recipe of recipes) {
+      recipe.imageURL = await fetchImageForRecipe(recipe.name);
+    }
+
     // Save the recipes to the database
     await saveRecipesToDatabase(recipes, userId);
-
-    // Log image URL for each generated recipe
-    for (const recipe of recipes) {
-      const imageUrl = await fetchImageForRecipe(recipe.name);
-      if (imageUrl) {
-        console.log(`Image URL for ${recipe.name}:`, imageUrl);
-      } else {
-        console.log(`No image found for ${recipe.name}`);
-      }
-    }
 
     console.log('Recipes generated and saved successfully.');
   } catch (error) {

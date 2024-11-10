@@ -50,6 +50,7 @@ export async function saveRecipesToDatabase(recipes: any[], userId: string): Pro
           description: recipe.description || '',
           timeToMakeInSeconds: recipe.timeToMakeInSeconds || 0,
           difficulty: difficultyEnumValue,
+          imageURL: recipe.imageURL || null, // Save the image URL
           userId,
         },
       });
