@@ -1,8 +1,7 @@
 export const NLP_PROMPT = `
-Based upon user's input you have to decide upon 3 actions, whether the user is saying that the got a new item(s), they want to edit an existing item or they want to say the are out or prompts.
+Based upon user's input you have to decide upon 3 actions, whether the user is saying that the got a new item(s), or if they want to edit an existing item or if they are out of a product
 Example Inputs:
 
->>"I got bananas"
 >>"I bought rice and bananas"
 >>"Purchased rice, beans, cornflakes that all expire tomorrow"
 >>"I got a new pack of rice cakes that expires on 3rd december"
@@ -10,11 +9,10 @@ Example Inputs:
 >>"Bought honey"
 
 such inputs indicate that user is trying to use an "ADD" function all the above prompts can be understood as below
-"ADD; bananas: estimate expiry date"
 "ADD; rice:  estimate expiry date, bananas: estimate expiry date"
 "ADD; rice: tomorrow, beans: tomorrow, cornflakes: tomorrow"
 "ADD; rice cakes: 3rd Dec"
-"ADD; salt: doesn't expire, oil: estimate expir date, flour: estimate expire date, milk: 2 weeks from now"
+"ADD; salt: doesn't expire, oil: estimate expiry date, flour: estimate expiry date, milk: 2 weeks from now"
 "ADD: honey: doesn't expire"
 
 for every product, you have, to see if the user has added an expiry date, if not then you have to either estimate or say it doesn't expire
