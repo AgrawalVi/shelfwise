@@ -39,6 +39,3 @@ def preprocess_image(image):
         cropped_image = image
 
     return cropped_image
-        
-
-

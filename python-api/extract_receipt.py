@@ -42,8 +42,6 @@ def extractor(image_input):
     if not image:
         return None
     
-    #save_text_to_file(text, output_text_file)
-
     text = extract_text_from_image(image)
     if not text.strip():
         print("No text extracted from the image.")
