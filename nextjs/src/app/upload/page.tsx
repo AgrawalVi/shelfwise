@@ -1,7 +1,5 @@
-import UploadButton from "@/components/general/upload-button";
+import UploadButton from "@/components/general/upload-button"
 
 export default function Page() {
-  return (
-    <UploadButton />
-  )
+  return <UploadButton groceries={[]} />
 }

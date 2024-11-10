@@ -3,6 +3,7 @@
 import { GroceryItem } from "@/types"
 import { parseOCR } from "./parse-ocr"
 import { getExpirationDate } from "./get-expiration-date"
+import { auth } from "@clerk/nextjs/server"
 
 const validFileTypes: { [key: string]: string[] } = {
   "image/jpeg": [".jpeg", ".jpg"],
@@ -10,86 +11,17 @@ const validFileTypes: { [key: string]: string[] } = {
 }
 
 const sample = `
-~ @TARGET Le
-
-EXPECT MORE PAY LESS:
-
-07/18/2010 01:51 PM EXPIRES 10/16/10
-QA
-ACCESSORIES
-061041991 CHECK CLUTCH T $12.99
-
-BABY
-030050284 MILK STORAGE T $8.94 4
-Saved $1.00 off $9.94
-
-CLEANING SUPPLIES
-
-002090549 Pach rer T $2.89
-003050316 T $3.84
-003050598 SWIFEER 7 ‘$4.49
-
-GROCERY
-071090734 MP COOKIES FO
-
-$1.77
-071091011 PEPPERIDGE FD $2.54
-071200475 ‘SPECIAL K FD ara
-071200582 NATUREVALLEY FD 2.69
-212180856 MP SOUP. FD 0.89
-231100893 AF COFFEE FD 6.99
-231181089 MP FILTERS FT 0.87
-270020427 LEAN CUISINE FD 1.94
-270060019 LEAN POCKETS FD $2.04
-284000048 PILSBRY CRES FD $1.89
-284050061 COFFEEMATE FO $2.04
-TH-BEAUTY -COSMETICS
-049090436. COLGATE T $1.99 |
-535000525760 MFR COUPON $1.00-
-Coupon $1.00 off $2.99
-HOME
-249050082 BOOKCASE $16.00 1
-Seed | $3.99 of f he 99
-253010027 ZIPLOC $4.89 4
-‘SPECIALTY .
-245030540 KY JELLY 402 L $3.50 4
-Toys- So RE
-2040200; NC re ‘OOTBALL T $1.48
-= ~-SPECIAL COUPON--------------~
-053221371 WEDDING CARD _ $3.59
-Refund Value $3 T
-053226306 WED CARD $1.99
-Refund Value $1.76
-053201726 RPG CARD $2.99
-Refund Value $2.64 T
-
-PACKAGE SUBTOTAL
-TARGET COUPON
-
-PACKAGE TOTAL
-
-SUBTOTAL = $93.78
-50% on $68 a Bi 3
-50% on $25.3
-foiaL $100: %
-VISA CHARGE $100.42
-4 INDICATES SAVINGS
-
-YOU SAVED $8.68
-
-om
-=
-
-ae
-ae
-
-Get 5 cents off every
-time you use a
-reusable bagt
-`
+6343 Penn Avenue\nPittsburgh PA 15206\nStore #638 - (412) 363-5748\n\nOPEN 8:00AM TO 9:00PM DAILY\nA-APPLE EACH ORG FUJI 1,38\n\n2EA _-@ 0.69/EA\nA-GRAPEFRUIT BAG RUBY RED 5 LB 4,49\n\nA-POTATO BAG SHEET 2 LB 1,69\nA-TOMATOES ON VINE PEARL 14 0Z 2.99\nAVOCADOS ORGANIC 4 COUNT 3.99\nBANANAS 0.76\n\n4EA -@.0.19/EA\nB-BREAD WHOLE WHEAT FIBER (5G/ 2.99\nBURGER MASALA VEGETABLE 2.49\nCEREAL BRAN FLAKES TJ'S 1,99\nCHEDDAR SHARP WISCONSIN TJ'S. 2.62\nCOFFEE GROUND FRENCH ROAST 5.49\nCORN ON THE COB EACH 1.47\n3EA \u2014-@ 0.49/EA\nFRUIT APPLESAUCE ORGANIC\nFRUIT APPLESAUCE ORGANIC\nMILK REDUCED FAT 2% GALLON TJ\u2019\n\n2)\n\n2\n\n3.51\nORGANIC BROCCOLI FZN 2.49\nSPARKLING SPRING WATER TJ'S P 0.79\nTANALES BEEF 2.29\nTAMALES GRN CHILE&CHEESE 2.29\nWH TUSCAN PANE 5.98\n\n202 @ 2.99/02\n\nWH TUSCAN PANE 2.99\nSUBTOTAL $57.75\nTOTAL $57.75\nDEBIT $57.75\nspeeobetaeeB545\nPURCHASE -:\nSWIPED\n\nAUTH# 225442\n\nINVOICE #: 246\n1638, ,00,\n\n05-01-2012 03:01PM\n\nREFERENCE #: 383074\n\nTTENS 28 W., Sharon\n05-01-2012 05:59PM 0638 04 0832 0246\n\nTHANK YOU FOR SHOPPING AT\nTRADER JOE'S\nwww. trader joes .com\n"`
 
 export const uploadImage = async (formData: FormData) => {
   // check if formData contains an image
+
+  // const user = auth()
+
+  // if (!user || !user.userId) {
+  //   return { error: "User not authenticated" }
+  // }
+
   // const file = formData.get('image');
 
   // if (!file || !(file instanceof File)) {
@@ -142,5 +74,5 @@ export const uploadImage = async (formData: FormData) => {
 
   console.log("toReturn", toReturn)
 
-  return toReturn
+  return { success: toReturn }
 }

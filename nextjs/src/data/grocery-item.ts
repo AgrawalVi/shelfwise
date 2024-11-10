@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { transformGroceryItems } from "@/lib/utils"
-import { GroceryItem} from "@/types"
+import { GroceryItem } from "@/types"
 
 export const addGroceriesBulk = async (
   userId: string,
@@ -29,5 +29,63 @@ export const addGrocery = async (userId: string, grocery: GroceryItem) => {
     })
   } catch (e) {
     console.error(e)
+  }
+}
+
+export const getGroceriesByUser = async (userId: string) => {
+  try {
+    return await db.item.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        expiresAt: {
+          sort: "desc",
+          nulls: "last",
+        },
+      },
+    })
+  } catch (e) {
+    console.error(e)
+    return []
+  }
+}
+
+export const editGrocery = async (
+  groceryId: number,
+  userId: string,
+  name: string,
+  perishable: boolean,
+  expiresAt: Date | null
+) => {
+  try {
+    await db.item.update({
+      where: {
+        id: groceryId,
+        userId,
+      },
+      data: {
+        name,
+        perishable,
+        expiresAt,
+      },
+    })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const deleteGrocery = async (userId: string, groceryId: number) => {
+  try {
+    await db.item.delete({
+      where: {
+        id: groceryId,
+        userId
+      }
+    })
+    return true
+  } catch (e) {
+    console.error(e)
+    return false
   }
 }

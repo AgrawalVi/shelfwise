@@ -1,13 +1,17 @@
 "use client"
 
-import { GroceryItem } from "@/types"
+import { uploadImage } from "@/actions/image-upload.ts/upload-image"
 import { Button } from "../ui/button"
 import { useRef, useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { GroceryItem } from "@/types"
 
-export const UploadButton = () => {
+export const UploadButton = ({ groceries }: { groceries: GroceryItem[] }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const { toast } = useToast()
   const [file, setFile] = useState<File | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const handleButtonClick = () => {
     fileInputRef.current?.click() // Open file input when button is clicked
@@ -21,38 +25,33 @@ export const UploadButton = () => {
     }
   }
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-
+  const handleSubmit = async () => {
+    setLoading(true)
     if (!file) {
-      alert("Please select a file first.")
+      toast({title: "Please select a file first.", variant: "destructive"})
       return
     }
 
     // Create FormData object and append the file
     const formData = new FormData()
-    formData.append("file", file)
+    formData.append("image", file)
 
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+    const response = await uploadImage(formData)
+    if (response.error || !response.success) {
+      toast({
+        title: "An error occurred",
+        description: response.error,
+        variant: "destructive",
       })
-
-      if (!response.ok) {
-        throw new Error("Error uploading file")
-      }
-
-      const data = await response.json()
-      console.log("File uploaded successfully:", data)
-    } catch (error) {
-      console.error("Error:", error)
+    } else {
+      groceries = response.success
     }
+    setLoading(false)
   }
 
   return (
     <div>
-      <Button onClick={handleButtonClick}>Take Image</Button>
+      <Button onClick={handleButtonClick} disabled={loading}>Take Image</Button>
       <span>{fileName || "No file chosen"}</span>
 
       <form onSubmit={handleSubmit}>
@@ -62,7 +61,7 @@ export const UploadButton = () => {
           style={{ display: "none" }} // Hide the file input
           onChange={handleFileChange}
         />
-        <button type="submit">Upload</button>
+        <Button type="submit" disabled={!file}>Upload</Button>
       </form>
     </div>
   )

@@ -1,16 +1,5 @@
-type GroceryItemBase = {
+export type GroceryItem = {
   name: string
   perishable: boolean
+  expirationDate?: Date
 }
-
-type NonPerishableItem = GroceryItemBase & {
-  perishable: false
-  expirationDate?: never
-}
-
-type PerishableItem = GroceryItemBase & {
-  perishable: true
-  expirationDate: Date
-}
-
-export type GroceryItem = NonPerishableItem | PerishableItem
