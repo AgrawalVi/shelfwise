@@ -67,3 +67,10 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Styles (optional) */
+/* @layer components {
+  .custom-border {
+    @apply border border-gray-300; /* Replace border-border with valid classes
+  } 
+} */
