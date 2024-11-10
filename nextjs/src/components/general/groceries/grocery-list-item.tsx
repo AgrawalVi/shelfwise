@@ -15,7 +15,9 @@ export default function GroceryListItem({ grocery }: { grocery: Item }) {
     <Popover>
       <PopoverTrigger>
         <Card className="flex justify-between px-5 py-4 items-center">
-          <div className="text-2xl capitalize">{grocery.name}</div>
+          <div className="text-2xl capitalize text-left pr-2">
+            {grocery.name}
+          </div>
           {grocery.expiresAt ? (
             <div className="flex flex-col items-center justify-center bg-white/50 rounded-lg px-3 py-1">
               <div className="uppercase text-sm">
