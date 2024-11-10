@@ -89,7 +89,7 @@ export default function UseRecipeButton({
               </div>
               <Switch
                 disabled={loading}
-                onClick={() => handleToggleChange(item.id)}
+                onClick={() => handleToggleChange(item.item.id)}
               />
             </div>
           )
