@@ -193,7 +193,7 @@ export async function generateAndSaveRecipes(): Promise<void> {
     let response;
     try {
       response = await generateText({
-        model: openai('gpt-4'), // Using GPT-4 model
+        model: openai('gpt-4o'), // Using GPT-4 model
         messages: convertToCoreMessages([{ role: 'user', content: extendedPrompt }]),
         maxTokens: 2000,
       });

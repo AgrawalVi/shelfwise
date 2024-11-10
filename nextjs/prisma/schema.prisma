@@ -60,13 +60,14 @@ model Recipe {
   description         String
   timeToMakeInSeconds Int
   difficulty          RecipeDifficulty
-
-  userId     String
-  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  RecipeItem RecipeItem[]
-  RecipeStep RecipeStep[]
-  createdAt  DateTime?     @default(now())
-  updatedAt  DateTime?    @updatedAt 
+  imageURL            String?
+  
+  userId              String
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  RecipeItem          RecipeItem[]
+  RecipeStep          RecipeStep[]
+  createdAt           DateTime?        @default(now())
+  updatedAt           DateTime?        @updatedAt
 }
 
 model RecipeItem {
@@ -75,12 +76,12 @@ model RecipeItem {
   quantity Int
   unit     String
 
-  itemId   Int
-  item     Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  createdAt  DateTime?     @default(now())
-  updatedAt  DateTime?     @updatedAt
+  itemId    Int
+  item      Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  recipeId  Int
+  recipe    Recipe    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model RecipeStep {
@@ -89,8 +90,8 @@ model RecipeStep {
   text String
   time Int
 
-  recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  createdAt  DateTime?     @default(now())
-  updatedAt  DateTime?     @updatedAt
+  recipeId  Int
+  recipe    Recipe    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
