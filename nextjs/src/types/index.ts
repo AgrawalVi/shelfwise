@@ -1,4 +1,5 @@
-export type groceryItem = {
+export type GroceryItem = {
   name: string
-  expirationDate: Date | undefined
+  perishable: boolean
+  expirationDate?: Date
 }

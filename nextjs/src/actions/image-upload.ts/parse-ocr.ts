@@ -5,7 +5,7 @@ const prompt = `
 You are a helpful assistant that will extract grocery items from the text that is provided. 
 The provided text that was extracted from an OCR that was used on a receipt. 
 
-You will infer the type of item that it is from the text, and using your best judgement, return the item names.
+Based on the provided text, extract the grocery items in the human friendly manner. 
 Only return the name of items that are groceries and food items. Do not return any other items. 
 
 ---
