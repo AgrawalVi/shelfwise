@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-green-400/60 text-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[url('/background1.jpg')] bg-cover bg-center text-white">
       <header className="text-center mb-8">
         <h1 className="text-5xl font-bold mb-4">Welcome to ShelfWise!</h1>
         <p className="text-lg">
@@ -32,7 +32,7 @@ export default function LandingPage() {
           Already have an account?{" "}
           <Link
             href="/dashboard"
-            className="text-black hover:underline hover:text-black"
+            className="text-blue-500 hover:underline hover:text-blue-500"
           >
             Sign In
           </Link>
