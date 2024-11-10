@@ -5,6 +5,7 @@ import { generateText, convertToCoreMessages } from 'ai';
 import { auth } from '@clerk/nextjs/server';
 import { getUserById } from '@/data/users';
 import { getUserItems, saveRecipesToDatabase } from '@/data/generate-recipes-db'; // Import the necessary functions
+import { db } from '@/lib/db'; // Ensure you import your database connection
 
 // Base prompt to use directly in the code
 const BASE_PROMPT = `
@@ -196,19 +197,30 @@ export async function generateAndSaveRecipes(): Promise<void> {
 
     console.log('Usable ingredients found:', userItems);
 
-    const ingredientList = userItems.map(item => item.name).join(', ');
+    // Fetch the last 10 recipe names for the user
+    const lastRecipes = await db.recipe.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      select: { name: true },
+    });
 
-    // Create the full prompt with ingredients
-    const prompt = `${BASE_PROMPT}\n\nIngredients provided for generating the recipes:\n${ingredientList}\n`;
+    const lastRecipeNames = lastRecipes.map(recipe => recipe.name).join(', ');
 
-    console.log('Generated prompt:', prompt);
+    // Create the full prompt with ingredients and exclude the last 10 recipes
+    let extendedPrompt = `${BASE_PROMPT}\n\nIngredients provided for generating the recipes:\n${userItems.map(item => item.name).join(', ')}\n`;
+    if (lastRecipeNames) {
+      extendedPrompt += `\nDo not give these recipes: ${lastRecipeNames}\n`;
+    }
+
+    console.log('Generated prompt:', extendedPrompt);
 
     // Generate recipes using the OpenAI API with GPT-4
     let response;
     try {
       response = await generateText({
         model: openai('gpt-4'), // Using GPT-4 model
-        messages: convertToCoreMessages([{ role: 'user', content: prompt }]),
+        messages: convertToCoreMessages([{ role: 'user', content: extendedPrompt }]),
         maxTokens: 2000,
       });
     } catch (apiError) {
