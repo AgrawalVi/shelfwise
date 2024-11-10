@@ -33,7 +33,7 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
-            <main className="p-4">{children}</main>
+            <main>{children}</main>
             <Toaster />
           </body>
         </TooltipProvider>
