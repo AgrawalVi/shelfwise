@@ -78,7 +78,7 @@ async def scan_receipts(payload: ImagePayload, credentials: HTTPAuthorizationCre
 
 @app.get("/")
 async def root():
-    return {"message": "API is running"}
+    return "Hello World"
 
 if __name__ == "__main__":
     import uvicorn
